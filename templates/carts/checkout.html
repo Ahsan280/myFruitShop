@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Single Page Header start -->
+        <div class="container-fluid page-header py-5">
+            <h1 class="text-center text-white display-6">Checkout</h1>
+            <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                <li class="breadcrumb-item active text-white">Checkout</li>
+            </ol>
+        </div>
+        <!-- Single Page Header End -->
+
+        <!-- Checkout Page Start -->
+        <div class="container-fluid py-5">
+            <div class="container py-5">
+                <h1 class="mb-4">Billing details</h1>
+                <form action="{% url 'place_order' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="row g-5">
+                        <div class="col-md-12 col-lg-6 col-xl-7">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-6">
+                                    <div class="form-item w-100">
+                                        <label class="form-label my-3">First Name<sup>*</sup></label>
+                                        <input name="first_name" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-lg-6">
+                                    <div class="form-item w-100">
+                                        <label class="form-label my-3">Last Name<sup>*</sup></label>
+                                        <input type="text" name="last_name" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Email Address<sup>*</sup></label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Mobile<sup>*</sup></label>
+                                <input type="tel" name="phone" class="form-control" required>
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Address Line 1<sup>*</sup></label>
+                                <input type="text" name="address_line_1" class="form-control" placeholder="House Number Street Name" required>
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Address Line 2<sup>*</sup></label>
+                                <input type="text" name="address_line_2" class="form-control" placeholder="Optional">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">City<sup>*</sup></label>
+                                <input type="text" name="city" class="form-control">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">State<sup>*</sup></label>
+                                <input type="text" name="state" class="form-control" required>
+                            </div>
+
+                            <div class="form-item">
+                                <label class="form-label my-3">Country<sup>*</sup></label>
+                                <select name="country" class="form-control" required>
+                                    <option value="">Select a country</option>
+                                    <option value="pakistan">Pakistan</option>
+                                    <option value="india">India</option>
+                                    <option value="bangladesh">Bangladesh</option>
+                                    <option value="china">China</option>
+                                    <option value="iran">Iran</option>
+                                    <option value="iraq">Iraq</option>
+                                    <option value="sri_lanka">Sri-Lanka</option>
+                                    <option value="japan">Japan</option>
+                                    <option value="USA">United States</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="UK">United Kingdom</option>
+                                </select>
+                            </div>
+
+                            <br>
+
+                            <div class="form-item">
+                                <textarea name="order_note" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Oreder Notes (Optional)"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6 col-xl-5">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Products</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for cart_item in cart_items %}
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <img src="{{cart_item.product.image.url}}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
+                                                </div>
+                                            </th>
+                                            <td class="py-5">{{cart_item.product.product_name}}</td>
+                                            <td class="py-5">${{cart_item.product.product_price}}</td>
+                                            <td class="py-5">{{cart_item.quantity}}</td>
+                                            <td class="py-5">${{cart_item.get_CartItem_price}}</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                        <tr>
+                                            <th scope="row">
+                                            </th>
+                                            <td class="py-5">
+                                                <p class="mb-0 text-dark py-3">Subtotal</p>
+                                            </td>
+                                            <td class="py-5">
+                                                <div class="py-3 border-bottom border-top">
+                                                    <p class="mb-0 text-dark">${{subtotal}}</p>
+                                                </div>
+                                            </td>
+                                            <td class="py-5">
+                                                <p class="mb-0 text-dark py-3">Tax</p>
+                                            </td>
+                                            <td class="py-5">
+                                                <div class="py-3 border-bottom border-top">
+                                                    <p class="mb-0 text-dark">${{tax}}</p>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th scope="row">
+                                            </th>
+                                            <td class="py-5">
+                                                <p class="mb-0 text-dark text-uppercase py-3">TOTAL</p>
+                                            </td>
+                                            <td class="py-5"></td>
+                                            <td class="py-5"></td>
+                                            <td class="py-5">
+                                                <div class="py-3 border-bottom border-top">
+                                                    <p class="mb-0 text-dark">${{grand_total}}</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                                <div class="col-12">
+                                    <div class="form-check text-start my-3">
+                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Paypal-1" name="Paypal" value="Paypal">
+                                        <label class="form-check-label" for="Paypal-1">Paypal</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                                <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place Order</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Checkout Page End -->
+{% endblock %}

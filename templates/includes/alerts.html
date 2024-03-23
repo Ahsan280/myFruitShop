@@ -1,0 +1,22 @@
+{% if messages %}
+
+    {% for message in messages %}
+    <div id="message" class="container">
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role="alert">
+        <button id="btnclose" type="button" class="btn-close" aria-label="Close"></button>
+
+
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error: {% endif %}
+        {{ message }}
+    </div>
+    </div>
+<script>
+    const close_button = document.getElementById("btnclose");
+    close_button.addEventListener("click", function(){
+    const message = document.getElementById("message");
+    message.style.display='none';
+    })
+</script>
+    {% endfor %}
+
+{% endif %}
